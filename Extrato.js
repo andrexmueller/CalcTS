@@ -6,18 +6,39 @@ class Extrato {
 
     insereVinculo(vinculo) {
         this.listaVinculos.push(vinculo);
-        //this.listaVinculos.sort((a, b) => b.admissao.menorIgual(a.admissao));
+        
         this.listaVinculos.sort((a, b) => a.admissao - b.admissao);
+        for (let v of this.listaVinculos) {
+            v.resetTempoAproveitado();
+            v.resetPeriodosCarencia();
+        }
+
+        for (let i = 0; i < this.listaVinculos.length-1; i++) {
+            for (let j = i+1; j < this.listaVinculos.length; j++) {
+                retiraConcomitancia(this.listaVinculos[i], this.listaVinculos[j]);
+                retiraConcomitanciaCarencia(this.listaVinculos[i], this.listaVinculos[j]);
+            }
+        }
+        
+        this.listaVinculos.sort((a, b) => a.admissao - b.admissao);
+        
+        
+
+    }
+
+    deletaVinculo(idx) {
+        this.listaVinculos.splice(idx, 1);
+        this.listaVinculos.sort((a, b) => a.admissao - b.admissao);
+        for (let v of this.listaVinculos) {
+            v.resetTempoAproveitado();
+        }
         for (let i = 0; i < this.listaVinculos.length-1; i++) {
             for (let j = i+1; j < this.listaVinculos.length; j++) {
                 retiraConcomitancia(this.listaVinculos[i], this.listaVinculos[j]);
             }
         }
-        //this.listaVinculos.sort((a, b) => b.admissao.menorIgual(a.admissao));
+        this.listaVinculos.sort((a, b) => b.admissao.menorIgual(a.admissao));
         this.listaVinculos.sort((a, b) => a.admissao - b.admissao);
-        
-        
-
     }
 
     calculaTempoLiquido() {
@@ -28,6 +49,25 @@ class Extrato {
         return liquidoTotal;
     }
     
+    calculaCarenciaLiquida() {
+        let carenciaLiquida = 0;
+        
+        for (let v of this.listaVinculos) {
+            carenciaLiquida += v.carenciaLiquida();
+        }
+        return carenciaLiquida;
+    }
+    
+    calculaCarenciaLiquida() {
+        let carenciaLiquida = 0;
+        
+        for (let v of this.listaVinculos) {
+            carenciaLiquida += v.carenciaLiquida();
+        }
+        return carenciaLiquida;
+    }
+
+
     imprimeExtrato() {
         console.log("===========================================================")
         
@@ -44,6 +84,7 @@ class Extrato {
 
 function retiraConcomitancia(v1, v2) {
     
+
     if (v1.fator < v2.fator) {
         return retiraConcomitancia(v2, v1);
     }
@@ -75,3 +116,40 @@ function retiraConcomitancia(v1, v2) {
 
     
 }
+
+
+function retiraConcomitanciaCarencia(v1, v2) {
+    
+
+    if (v1.fator < v2.fator) {
+        return retiraConcomitanciaCarencia(v2, v1);
+    }
+
+    if (v1.admissao >= v2.admissao && v1.fator < v2.fator) {
+        return retiraConcomitanciaCarencia(v2, v1);
+    }
+    
+    let newV2 = [];
+
+    for (let t2 of v2.periodosCarencia) {
+        for (let t1 of v1.periodosCarencia) {
+            let conc = t2.subtraiConcomitancia(t1);
+        
+            if (typeof(conc) == 'object') {
+                newV2.push(conc);
+            } 
+        }
+    }
+
+    
+    for (let t of v2.periodosCarencia) {
+        if (t.inicio && t.final) {
+            newV2.push(t)
+        }
+    }
+    v2.periodosCarencia = newV2;
+    v2.periodosCarencia.sort((a, b) => a.inicio.menorIgual(b.inicio));
+
+    
+}
+

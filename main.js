@@ -1,7 +1,13 @@
 
 
+const segurado = new Segurado()
+const extrato = new Extrato();
+const nascimento = document.querySelector("#nascimento");
+const der = document.querySelector("#der");
+const sexo = document.querySelector('input[name="sexo"]:checked');
+console.log(">>>>> ", sexo)
 
-extrato = new Extrato();
+const extts = document.querySelector("#extts");
 const tabelaExtrato = document.querySelector("#extrato");
 
 
@@ -9,7 +15,7 @@ function imprimeExtrato() {
     
 
     for (let i=tabelaExtrato.children.length-1; i>=0; i--) {
-        tabelaExtrato.children[i].remove();
+        tabelaExtrato.children[i].remove(); 
     }
     
     
@@ -21,8 +27,11 @@ function imprimeExtrato() {
         vinculo => imprimeVinculo(vinculo, i++)
     );
 
-    let tempoTotal = document.querySelector("#tempoTotal");
-    tempoTotal.textContent = extrato.calculaTempoLiquido().toString();
+    
+
+    //let totaltempo = document.querySelector("#totaltempo");
+    document.querySelector("#totaltempo").textContent = extrato.calculaTempoLiquido().toString();
+    document.querySelector("#totalcarencia").textContent = extrato.calculaCarenciaLiquida();
 }
 
 function imprimeVinculo(vinculo, idx) {
@@ -37,12 +46,43 @@ function imprimeVinculo(vinculo, idx) {
     periodo.textContent = vinculo.tempoNatural;
     const liquido = document.createElement("td");
     liquido.textContent = vinculo.tempoLiquido();
+    let fator = document.createElement("td");
+    fator.textContent = vinculo.fator;
+    let car = document.createElement("td");
+    car.textContent = vinculo.carenciaLiquida();
+    
+    
+    let botaoRemover = document.createElement("button");
+    botaoRemover.textContent = " - "
+    botaoRemover.setAttribute("class", "botaoremover")
+    botaoRemover.onclick = () => { 
+        extrato.deletaVinculo(idx-1);
+        imprimeExtrato()
+    }
     tabelaExtrato.appendChild(novalinha);
     novalinha.appendChild(ordem);
     novalinha.appendChild(admissao);
     novalinha.appendChild(demissao);
     novalinha.appendChild(periodo);
+    novalinha.appendChild(fator);
     novalinha.appendChild(liquido);
+    novalinha.appendChild(car);
+    novalinha.appendChild(botaoRemover);
+    tabelaExtrato.appendChild(novalinha);
+   
+}
+
+
+
+const botaoInicia = document.querySelector("#simulacao");
+botaoInicia.onclick = () => {
+    segurado.der = Data.parseData(der.value);
+    segurado.nascimento = Data.parseData(nascimento.value);
+    segurado.sexo = sexo.value;
+    extts.style.display = 'inline';
+
+    console.log(segurado)
+
 
 }
 
@@ -67,13 +107,8 @@ botaoInsere.onclick = () => {
     datastr2.value = '';
     fator.value = 1.0;
 
-    
     imprimeExtrato()
-    // tempoTotalvar = Periodo.soma(tempoTotalvar, vinculo.tempoNatural);
-    // tempoTotal.textContent = tempoTotalvar.toString();    
-    return;
+
+    document.querySelector("#inicio").focus();
 
 }
-
-
-

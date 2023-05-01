@@ -8,26 +8,85 @@
   <body>
     <h1>EXTTS</h1>
 
-    <input class="datas" id="inicio" type="date" value="">
-    <input class="datas" id="final" type="date">
-    <input id="fator" type="number" value="1.0">
-    <button class="botao" id="insere">Insere</button>
+    <div id="dadosDoSegurado">
+      
+      <h3>Nascimento</h3>
+      <input class="datas" id="nascimento" type="date" value="">        
+      <h6></h6>
+      <h3>DER</h3>
+      <input class="datas" id="der" type="date" value=""> <br>
+      
+      
+      
+        <h4>Sexo</h4>  
+        <div>
+          <input type="radio" id="masculino" name="sexo" value="masculino" checked>
+          <label for="masculino">Masculino</label>
+        </div>
+        <div>
+          <input type="radio" id="feminino" name="sexo" value="feminino">
+          <label for="feminino">Feminino</label>
+        </div>
+      
+        <h1></h1>
+        <button class="botao" id="simulacao">Inicia Simulação</button>
+    </div>
 
-
-    <h2></h2>
-
-    <table id="extrato">
-    </table>
-    -----------------------
-    <h2></h2>
-    <span id="tempoTotal"></span>  
-
-
+    <h6>__________________________________________________</h6>
+    
+    <div id="extts" >
+      <div id="informadatas">
+        <input class="datas" id="inicio" type="date" value="">
+        <input class="datas" id="final" type="date">
+        <input id="fator" type="number" value="1.0">
+        <button class="botao" id="insere">Insere</button>
+      </div>
+  
+      <h2></h2>
+  
+      <table>
+        <thead>
+          <tr>
+            <th colspan="7">Extrato de Tempo de Contribuição</th>
+          </tr>
+          <tr>
+            <td>#</td>
+            <td>Admissão</td>
+            <td>Demissão</td>
+            <td>Tempo Nat</td>
+            <td>Fator</td>
+            <td>Tempo Liq</td>
+            <td>Carencia</td>
+          </tr>
+          <tbody id="extrato">
+            <tr>
+              <td> </td>
+              <td> </td>
+              <td> </td>
+              <td> </td>
+              <td> </td>
+              <td> </td>
+              <td> </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <th scope="row" colspan="5">Total</th>
+              <td id="totaltempo"></td>
+              <td id="totalcarencia"></td>
+  
+            </tr>
+          </tfoot>
+        </thead>
+      </table>
+    </div>
+   
 
 
     <footer></footer>
   </body>
   <script src="datatempo.js"></script>
+  <script src="Regras.js"></script>
   <script src="Extrato.js"></script>
   <script src="Vinculo.js"></script>
   <script src="Intervalo.js"></script>

@@ -5,3 +5,18 @@
 td {
     border: 1px solid;
 }
+
+thead, tfoot {
+    background-color: #134566;
+    color: #fff;
+}
+
+h3 {
+    display: inline;
+    width: max-content;
+}
+
+#extts {
+    display: none;
+}
+

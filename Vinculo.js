@@ -24,8 +24,7 @@ class Vinculo {
         }
         return liquido;
     }
-    
-    
+ 
     inicializaPeriodosCarencia() {
         
         let inicio = new Data(); 
@@ -35,7 +34,7 @@ class Vinculo {
         inicio.setMonth(this.admissao.getMonth());
         inicio.setFullYear(this.admissao.getFullYear());
 
-        final.setDate(final.maxDiasMes());
+        final.setDate(this.demissao.maxDiasMes());
         final.setMonth(this.demissao.getMonth());
         final.setFullYear(this.demissao.getFullYear());
         return [new Intervalo(inicio, final)];
@@ -61,6 +60,7 @@ class Vinculo {
         str += ` - ${this.demissao.toLocaleDateString('en-GB')}`;
         str += `  :  ${this.tempoNatural.toString()}`;
         str += `   |  ${this.tempoLiquido().toString()}`;
+        str += `   <${this.carenciaLiquida()}>`
         return str;
     }
 

@@ -5,14 +5,21 @@ const extrato = new Extrato();
 const nascimento = document.querySelector("#nascimento");
 const der = document.querySelector("#der");
 const sexo = document.querySelector('input[name="sexo"]:checked');
-console.log(">>>>> ", sexo)
+
 
 const extts = document.querySelector("#extts");
 const tabelaExtrato = document.querySelector("#extrato");
 
+const texto = document.querySelector('#texto');
+const processatexto = document.querySelector('#processatexto');
+const caixatexto = document.querySelector('#caixatexto');
+const botaoProcessaTexto = document.querySelector('#processatexto')
+
+const padrao1 = /[0-9]{2}\/[0-9]{2}\/[0-9]{4} [0-9]{2}\/[0-9]{2}\/[0-9]{4}/g;
+const padrao2 = /[0-9]{2}\/[0-9]{2}\/[0-9]{4} [0-9]{2}\/[0-9]{4}/g;
+
 
 function imprimeExtrato() {
-    
 
     for (let i=tabelaExtrato.children.length-1; i>=0; i--) {
         tabelaExtrato.children[i].remove(); 
@@ -59,6 +66,18 @@ function imprimeVinculo(vinculo, idx) {
         extrato.deletaVinculo(idx-1);
         imprimeExtrato()
     }
+
+    let botaoAlterar = document.createElement("button");
+    botaoAlterar.textContent = " * "
+    botaoAlterar.setAttribute("class", "botaoalterar")
+    botaoAlterar.onclick = () => { 
+        document.querySelector("#inicio").value = extrato.listaVinculos[idx-1].admissao.toLocaleDateString("fr-CA");
+        document.querySelector("#final").value = extrato.listaVinculos[idx-1].demissao.toLocaleDateString("fr-CA");
+        extrato.deletaVinculo(idx-1);
+        
+        imprimeExtrato()
+    }
+
     tabelaExtrato.appendChild(novalinha);
     novalinha.appendChild(ordem);
     novalinha.appendChild(admissao);
@@ -68,6 +87,7 @@ function imprimeVinculo(vinculo, idx) {
     novalinha.appendChild(liquido);
     novalinha.appendChild(car);
     novalinha.appendChild(botaoRemover);
+    novalinha.appendChild(botaoAlterar);
     tabelaExtrato.appendChild(novalinha);
    
 }
@@ -80,6 +100,7 @@ botaoInicia.onclick = () => {
     segurado.nascimento = Data.parseData(nascimento.value);
     segurado.sexo = sexo.value;
     extts.style.display = 'inline';
+    caixatexto.style.display = 'block';
 
     console.log(segurado)
 
@@ -99,6 +120,7 @@ botaoInsere.onclick = () => {
     let data2 = Data.parseData(datastr2.value);
     if (datastr1.value==='' && datastr2.value==='') return;
 
+    console.log(datastr1.value, datastr2.value)
     let vinculo = new Vinculo(data1, data2, +fator.value);
     extrato.insereVinculo(vinculo);
     console.log(extrato)
@@ -112,3 +134,32 @@ botaoInsere.onclick = () => {
     document.querySelector("#inicio").focus();
 
 }
+
+botaoProcessaTexto.onclick = () => {
+    const str = texto.value;
+    const datas1 = [...str.matchAll(padrao1)];
+    const datas2 = [...str.matchAll(padrao2)];
+
+    let adm, dem, vinculo;
+    for (let p of datas1) {
+        console.log(p[0].split(' '))
+        adm = Data.parseData(p[0].split(' ')[0]);
+        dem = Data.parseData(p[0].split(' ')[1]);
+        vinculo = new Vinculo(adm, dem);
+        extrato.insereVinculo(vinculo);
+    }
+    let mes;
+    for (let p of datas2) {
+        console.log(p)
+        mes = p[0].split(' ')[1].slice(0, 2);        
+        adm = Data.parseData(p[0].split(' ')[0]);
+        dem = Data.parseData('01/'+p[0].split(' ')[1])
+        dem.setDate(dem.maxDiasMes());
+        vinculo = new Vinculo(adm, dem);
+        extrato.insereVinculo(vinculo);
+    }
+
+    texto.value = '';
+    imprimeExtrato();
+}
+

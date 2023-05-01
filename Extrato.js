@@ -35,6 +35,8 @@ class Extrato {
         for (let i = 0; i < this.listaVinculos.length-1; i++) {
             for (let j = i+1; j < this.listaVinculos.length; j++) {
                 retiraConcomitancia(this.listaVinculos[i], this.listaVinculos[j]);
+                retiraConcomitancia(this.listaVinculos[i], this.listaVinculos[j], true);
+
             }
         }
         this.listaVinculos.sort((a, b) => b.admissao.menorIgual(a.admissao));
@@ -57,16 +59,6 @@ class Extrato {
         }
         return carenciaLiquida;
     }
-    
-    calculaCarenciaLiquida() {
-        let carenciaLiquida = 0;
-        
-        for (let v of this.listaVinculos) {
-            carenciaLiquida += v.carenciaLiquida();
-        }
-        return carenciaLiquida;
-    }
-
 
     imprimeExtrato() {
         console.log("===========================================================")
@@ -83,8 +75,6 @@ class Extrato {
 
 
 function retiraConcomitancia(v1, v2) {
-    
-
     if (v1.fator < v2.fator) {
         return retiraConcomitancia(v2, v1);
     }
@@ -104,23 +94,18 @@ function retiraConcomitancia(v1, v2) {
             } 
         }
     }
-
-    
     for (let t of v2.tempoAproveitado) {
-        if (t.inicio && t.final) {
+        if (t.inicio && t.final) { 
             newV2.push(t)
         }
     }
+    
     v2.tempoAproveitado = newV2;
     v2.tempoAproveitado.sort((a, b) => a.inicio.menorIgual(b.inicio));
-
-    
 }
 
 
 function retiraConcomitanciaCarencia(v1, v2) {
-    
-
     if (v1.fator < v2.fator) {
         return retiraConcomitanciaCarencia(v2, v1);
     }
@@ -141,15 +126,12 @@ function retiraConcomitanciaCarencia(v1, v2) {
         }
     }
 
-    
     for (let t of v2.periodosCarencia) {
         if (t.inicio && t.final) {
             newV2.push(t)
         }
     }
     v2.periodosCarencia = newV2;
-    v2.periodosCarencia.sort((a, b) => a.inicio.menorIgual(b.inicio));
-
-    
+    v2.periodosCarencia.sort((a, b) => a.inicio.menorIgual(b.inicio));    
 }
 

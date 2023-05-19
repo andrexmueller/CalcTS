@@ -37,9 +37,10 @@
     <div id="caixatexto">
       <h1></h1>
       <textarea id="texto" name="cnis" rows="5" cols="80">Cole aqui os períodos para inclusão no extrato
+ou insira os perídos no formulário abaixo
       </textarea>
       <h1></h1>
-      <button id="processatexto">Processa Texto</button>
+      <button id="processaperiodos">Processa Períodos</button>
       <h1></h1>
     </div>
     
@@ -82,24 +83,67 @@
           </tbody>
           <tfoot>
             <tr>
-              <th scope="row" colspan="5">Total</th>
-              <td id="totaltempo"></td>
-              <td id="totalcarencia"></td>
-  
+              <th scope="row" colspan="5">Total até a EC103</th>
+              <td id="totaltempoEC"></td>
+              <td id="totalcarenciaEC"></td>
+            </tr>
+            <tr>
+              <th scope="row" colspan="5">Total até a DER</th>
+              <td id="totaltempoDER"></td>
+              <td id="totalcarenciaDER"></td>
             </tr>
           </tfoot>
         </thead>
       </table>
     </div>
+    
+    <h6>__________________________________________________</h6>
+
+    <!-- <div id="matriz" class="tabelaregra">
+      <table id="matrizTabela">
+        <thead>
+          <tr>
+            <th colspan="5">Nome da Regra</th>
+          </tr>
+          <tr>
+            <td colspan="2"></td>
+            <td>Requisito 1</td>
+            <td>Requisito 2</td>
+            <td>Implementa?</td>
+          </tr>
+          <tbody>
+            <tr>
+              <td rowspan="2">  Data Análise   </td>
+              <td>Exigido</td>
+              <td>xx</td>
+              <td>xx</td>
+              <td rowspan="2">Não</td>
+            </tr>
+            <tr>
+              <td>Obtido</td>
+              <td>xx</td>
+              <td>xxa xxm xxd</td>
+            </tr>
+          </tbody>
+      </table>
+    </div> -->
+
+    <div id="tabela15" class="tabelaregra"></div>
+    <div id="tabela16" class="tabelaregra"></div>
+    <div id="tabela17" class="tabelaregra"></div>
+    <div id="tabela20" class="tabelaregra"></div>
+    <div id="tabelaInt" class="tabelaregra"></div>
+    <div id="tabelaPro" class="tabelaregra"></div>
    
 
 
     <footer></footer>
   </body>
   <script src="datatempo.js"></script>
-  <script src="Regras.js"></script>
   <script src="Extrato.js"></script>
   <script src="Vinculo.js"></script>
   <script src="Intervalo.js"></script>
+  <script src="Regras.js"></script>
   <script src="main.js"></script>
+  <script src="tabelaRegras.js"></script>
 </html>

@@ -4,6 +4,7 @@
 
 td {
     border: 1px solid;
+    text-align: center;
 }
 
 thead, tfoot {
@@ -17,9 +18,18 @@ h3 {
 }
 
 #extts {
-    display: none;
+    /*display: none;*/
+    display: block;
 }
 
 #caixatexto {
-    display: none;
+    /*display: none;*/
+    display: block;
 }
+
+.matrizTabela {
+    width: 50%;
+    
+    table-layout: fixed;
+}
+

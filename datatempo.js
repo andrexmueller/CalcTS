@@ -170,6 +170,14 @@ class Periodo {
         return this.eIgual(that) && this.eMaior(that);
     }
 
+    eMenor(that) {
+        return !this.eMaiorIgual(that);
+    }
+
+    eMenorIgual(that) {
+        return !this.eMaior(that);
+    }
+
     static soma(p1, p2) {
         let anos = p1.anos + p2.anos;
         let meses = p1.meses + p2.meses;

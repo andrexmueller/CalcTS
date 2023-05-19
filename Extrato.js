@@ -21,10 +21,9 @@ class Extrato {
         }
         
         this.listaVinculos.sort((a, b) => a.admissao - b.admissao);
-        
-        
 
     }
+
 
     deletaVinculo(idx) {
         this.listaVinculos.splice(idx, 1);
@@ -35,13 +34,14 @@ class Extrato {
         for (let i = 0; i < this.listaVinculos.length-1; i++) {
             for (let j = i+1; j < this.listaVinculos.length; j++) {
                 retiraConcomitancia(this.listaVinculos[i], this.listaVinculos[j]);
-                retiraConcomitancia(this.listaVinculos[i], this.listaVinculos[j], true);
+                retiraConcomitanciaCarencia(this.listaVinculos[i], this.listaVinculos[j]);
 
             }
         }
         this.listaVinculos.sort((a, b) => b.admissao.menorIgual(a.admissao));
         this.listaVinculos.sort((a, b) => a.admissao - b.admissao);
     }
+
 
     calculaTempoLiquido() {
         let liquidoTotal = new Periodo(0, 0, 0);
@@ -51,6 +51,7 @@ class Extrato {
         return liquidoTotal;
     }
     
+    
     calculaCarenciaLiquida() {
         let carenciaLiquida = 0;
         
@@ -59,6 +60,43 @@ class Extrato {
         }
         return carenciaLiquida;
     }
+
+
+    calculaTempoAteDataLimite(dataLimite) {
+        let novaListaVinculos = [];
+        for (let v of this.listaVinculos) {
+            if (v.demissao.menorIgual(dataLimite)) {
+                novaListaVinculos.push(v);
+                continue;
+            }
+            if (v.admissao.menorIgual(dataLimite)) {
+                let parc = new Vinculo(v.admissao, dataLimite, v.fator);
+                novaListaVinculos.push(parc);
+            }
+        }
+        novaListaVinculos.sort((a, b) => a.admissao - b.admissao);
+        for (let v of novaListaVinculos) {
+            v.resetTempoAproveitado();
+            v.resetPeriodosCarencia();
+        }
+
+        for (let i = 0; i < novaListaVinculos.length-1; i++) {
+            for (let j = i+1; j < novaListaVinculos.length; j++) {
+                retiraConcomitancia(novaListaVinculos[i], novaListaVinculos[j]);
+                retiraConcomitanciaCarencia(novaListaVinculos[i], novaListaVinculos[j]);
+            }
+        }
+
+        let tempoTotal = new Periodo(0, 0, 0);
+        let carenciaTotal = 0;
+        for (let v of novaListaVinculos) {
+            tempoTotal = Periodo.soma(tempoTotal, v.tempoLiquido())
+            carenciaTotal += v.carenciaLiquida();
+        }
+        
+        return [tempoTotal, carenciaTotal];
+    }
+
 
     imprimeExtrato() {
         console.log("===========================================================")
@@ -72,6 +110,7 @@ class Extrato {
         console.log("Tempo Liquido   ", this.calculaTempoLiquido())
     }
 }
+
 
 
 function retiraConcomitancia(v1, v2) {
